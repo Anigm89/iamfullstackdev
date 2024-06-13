@@ -20,13 +20,8 @@ const fetchData = async () => {
 
 useEffect(() => {
   fetchData()
-}, [])
+}, [data])
 
-
-//funcion para que actualice la lista de treas despues de ñadir unanueva sin recargar la pagina:
-const updateData = () => {
-  fetchData();
-};
 
   return (
     <Router>
@@ -41,11 +36,12 @@ const updateData = () => {
         : 
           <Routes>
             <Route path="/" element={<Home data={data} />} />
+            <Route path="/create" element={<InputCreate /> } />
+
             {data.map(item => (
               <Route key={item._id} path={`/${item._id}`} element={<ItemDetailPage item={item}/>} />
             ))
             }
-            <Route path="/create" element={<InputCreate updateData={updateData} /> } />
           </Routes>
         }
         

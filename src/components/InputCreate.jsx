@@ -1,29 +1,30 @@
 import { useState } from "react";
 
-function InputCreate ({updateData}) {
+function InputCreate () {
 
     const [title, setTitle] = useState('');
     const [error, setError] = useState(null);
-    const [newTask, setNewTask] = useState('')
+    const [newTask, setNewTask] = useState('');
+
     const urlApi = 'http://localhost:3000/create'
 
     const send = async (e) => {
         e.preventDefault();
+        setNewTask('');
         try{
             if(title.trim() !== ''){
                 const response = await fetch(urlApi, {
-                    method: 'POST', // Método HTTP
+                    method: 'POST', 
                     headers: {
-                    'Content-Type': 'application/json', // Indicamos que el contenido es JSON
+                    'Content-Type': 'application/json', 
                     },
-                    body: JSON.stringify({title}), // Convertimos el payload de JS a JSON
+                    body: JSON.stringify({title}), //como es JSON hay que pasarlo como objeto
                 });
                 if(response.ok){
                     const tarea = await response.json()    
                     setNewTask(tarea.title);
                     setTitle('')
                     setError(null)
-                    updateData();
                 }
                 else{
                     setError('algo ha fallado')
@@ -32,10 +33,10 @@ function InputCreate ({updateData}) {
             else{
                 setError('introduce una tarea')
             }
-
         }
         catch(err){
             console.log(err)
+            setError(err)
         }
     }
     
@@ -45,7 +46,7 @@ function InputCreate ({updateData}) {
                 <input type="text" placeholder="añade una tarea" value={title} onChange={e => setTitle(e.target.value)} />
                 <button type="submit">Añadir</button>
             </form>
-            <p>{newTask} </p>
+            <p>Se ha enviado la tarea: {newTask} </p>
         </>
     )
 }
